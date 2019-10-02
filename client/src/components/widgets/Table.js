@@ -1,38 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MaterialTable from 'material-table';
 
 export default function Employee(props) {
+    const { data } = props;
+
     const [state, setState] = React.useState({
         modalOpen: false,
     });
-    console.log("Columns", props.columns)
-    console.log("Data", props.data)
+    const [myData, setMyData] = useState(data);
+
+    useEffect(() => {
+        setMyData(data)
+    }, [data])
+
     return (
         <React.Fragment>
             <MaterialTable
                 title={props.title}
                 columns={props.columns}
-                data={props.data}
+                data={myData}
                 onRowClick={props.onRowClick}
                 editable={{
-                    onRowUpdate: (newData, oldData) =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                const data = [...state.data];
-                                data[data.indexOf(oldData)] = newData;
-                                setState({ ...state, data });
-                            }, 600);
-                        }),
-                    onRowDelete: oldData =>
-                        new Promise(resolve => {
-                            setTimeout(() => {
-                                resolve();
-                                const data = [...state.data];
-                                data.splice(data.indexOf(oldData), 1);
-                                setState({ ...state, data });
-                            }, 600);
-                        }),
+                    onRowUpdate: (newData, oldData) => {
+                        return props.handleUpdate(newData, oldData)
+                    },
+                    onRowDelete: (oldData) => {
+                        console.log(oldData)
+                        return props.handleDelete(oldData)
+                    }
                 }}
                 options={{
                     exportButton: props.exportButton,

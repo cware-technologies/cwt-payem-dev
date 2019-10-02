@@ -14,7 +14,7 @@ export default function DatePicker(props) {
   function handleDateChange(date) {
     setSelectedDate(date);
   }
-
+  console.log(props)
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <KeyboardDatePicker
@@ -25,7 +25,8 @@ export default function DatePicker(props) {
           id="date-picker-inline"
           label={props.label}
           value={selectedDate}
-          onChange={handleDateChange}
+          onChange={props.onChange}
+          name={props.name}
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}

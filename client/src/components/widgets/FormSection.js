@@ -6,11 +6,12 @@ import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Select from './Select';
-import DatePicker from './DatePicker';
+import DatePicker from "react-datepicker";
 import CheckBoxes from './CheckBoxes';
 import classNames from 'classnames';
 import { FormHelperText } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import { DateTimePicker } from '../../../node_modules/@material-ui/pickers';
 
 const useStyles = makeStyles(theme => ({
     main: {
@@ -46,8 +47,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function FormSection(props) {
     const classes = useStyles();
-    const [errors, setErrors] = React.useState([]);
-
+    const disable = props.disable
     const getFormFields = (field) => {
         console.log(field)
         switch (field.type) {
@@ -63,6 +63,7 @@ export default function FormSection(props) {
                             margin="normal"
                             variant="outlined"
                             onBlur={props.handleBlur}
+                            
                         />
                     </Grid>
                 )
@@ -99,7 +100,16 @@ export default function FormSection(props) {
             case 'Date':
                 return (
                     <Grid item xs={4}>
-                        <DatePicker label={field.label} />
+                    <TextField
+                            id="outlined-multiline-static"
+                            label={field.label}
+                            type='date'
+                            className={classes.textField}
+                            margin="normal"
+                            variant="outlined"
+                            name={field.name}
+                            onChange={props.handleChange}
+                        />
                     </Grid>
                 )
             case 'Checkbox':
@@ -153,26 +163,11 @@ export default function FormSection(props) {
         return arr;
     }
 
-    const onFormSubmit = () => {
-        props.validationSchema
-            .validate(props.inputValues, { abortEarly: false })
-            .then(function (values) {
-                console.log(values)
-            })
-            .catch(function (err) {
-                console.log(err.errors)
-                setErrors(err.errors)
-            });
-
-        console.log(props.inputValues)
-    }
-    console.log(props.fields)
     return (
         <div className={classes.main}>
             <Container className="mt-5" className={classes.test}>
-                <form className={classes.container} noValidate autoComplete="off">
+                <form className={classes.container} noValidate autoComplete="off" onSubmit={props.onFormSubmit}>
                     {
-
                         props.fields.map(field => {
                             return (
                                 <React.Fragment>
@@ -195,14 +190,14 @@ export default function FormSection(props) {
                             )
                         })
                     }
-                    <Button variant="contained" color="primary" className={classes.button} onClick={onFormSubmit}>
+                    <Button variant="contained" color="primary" type="submit" className={classes.button} >
                         Save
                     </Button>
                 </form>
             </Container>
             <Container className={classNames(classes.test2, "mt-5")}>
                 <ul>
-                    {errors.map(error =>
+                    {props.errors.map(error =>
                         <li>
                             <FormHelperText error>
                                 {error}

@@ -42,9 +42,22 @@ const ValidationSchema = Yup.object().shape({
 
 export default function AddDeduction() {
 
-    const [data, setdata] = React.useState({
+    const [data, setdata] = React.useState({  });
+    const [errors, setErrors] = React.useState([]);
 
-    });
+    const onFormSubmit = (e) => {
+        e.preventDefault();
+
+        ValidationSchema
+            .validate(data, { abortEarly: false })
+            .then(function (values) {
+                console.log(values)
+            })
+            .catch(function (err) {
+                console.log(err.errors)
+                setErrors(err.errors)
+            });
+    }
 
     const onChangeValue = (e) => {
         let name = e.target.name
@@ -58,7 +71,8 @@ export default function AddDeduction() {
                 fields={Sections}
                 handleChange={onChangeValue}
                 inputValues={data}
-                validationSchema = {ValidationSchema}
+                onFormSubmit = {onFormSubmit}
+                errors = {errors}
             />
         </div>
     )

@@ -6,10 +6,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Table from '../widgets/Table';
+import FullScreenDialog from '../widgets/FullScreenDialog';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-
     return (
         <Typography
             component="div"
@@ -48,10 +49,24 @@ const useStyles = makeStyles(theme => ({
 export default function ScrollableTabsButtonForce(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
+    const [state, setState] = React.useState({
+        modalOpen: false,
+    });
 
     function handleChange(event, newValue) {
         setValue(newValue);
+        console.log(newValue)
     }
+
+    const handleModalOpen = () => {
+        setState({ ...state, modalOpen: true })
+    }
+
+    const handleModalClose = () => {
+        setState({ ...state, modalOpen: false })
+    }
+
+    console.log(props.data)
 
     return (
         <div className={classes.root}>
@@ -80,8 +95,23 @@ export default function ScrollableTabsButtonForce(props) {
                 </Tabs>
             </AppBar>
             <TabPanel>
-                {props.tabs[value].panel}
+                {/* {props.tabs[value].panel} */}
+                <Table 
+                    title={props.tabs[value].label} 
+                    columns={props.tabs[value].columns} 
+                    data={props.data} 
+                    isFreeAction={true}
+                    icon='add'
+                    tooltip= {"Add " + props.tabs[value].label}
+                    handleModalOpen={(event) => handleModalOpen()}
+                />
             </TabPanel>
+            <FullScreenDialog
+                open={state.modalOpen}
+                handleClose={handleModalClose}
+                component={props.tabs[value].component}
+                title= {props.tabs[value].label + " Details"}
+            />
         </div>
     );
 }

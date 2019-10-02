@@ -34,9 +34,31 @@ const ValidationSchema = Yup.object().shape({
 
 export default function AddCode() {
 
-    const [data, setdata] = React.useState({
+    const [data, setdata] = React.useState({  });
+    const [errors, setErrors] = React.useState([]);
 
-    });
+    const onFormSubmit = (e) => {
+        e.preventDefault();
+
+        ValidationSchema
+            .isValid(data)
+            .then(function (valid) {
+                if (valid === false) {
+                    console.log("VALID false")
+                    ValidationSchema.validate(data, { abortEarly: false })
+                        .then(function (values) {
+                            console.log(values)
+                        })
+                        .catch(function (err) {
+                            console.log(err.errors)
+                            setErrors(err.errors)
+                        });
+                }
+                else {
+                    console.log("VALID true")
+                }
+            })
+    }
 
     const onChangeValue = (e) => {
         let name = e.target.name
@@ -50,7 +72,8 @@ export default function AddCode() {
                 fields={Sections}
                 handleChange={onChangeValue}
                 inputValues={data}
-                validationSchema = { ValidationSchema }
+                onFormSubmit = {onFormSubmit}
+                errors = {errors}
             />
         </div>
     )

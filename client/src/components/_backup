@@ -1,0 +1,27 @@
+ // tabs = [
+        //     { id: '1', label: 'Contributions', icon: <TrendingUpIcon />, panel: <Table title="Contributions" columns={contributionsColumns} data={state.data} isFreeAction={false} />, },
+        //     { id: '2', label: 'Deductions', icon: <TrendingDownIcon />, panel: <Table title="Deductions" columns={deductionsColumns} data={state.data} isFreeAction={false} />, },
+        //     { id: '3', label: 'Salary Info', icon: <AccountBalanceWalletIcon />, panel: <Table title="Salary Info" columns={salaryInfoColumns} data={state.data} isFreeAction={false} />, },
+        //     { id: '4', label: 'Tax Info', icon: <AttachMoneyIcon />, panel: <Table title="Tax Info" columns={taxInfoColumns} data={state.data} isFreeAction={false} />, },
+        //     { id: '5', label: 'Bank Info', icon: <AccountBalanceIcon />, panel: <Table title="Bank Info" columns={bankInfoColumns} data={state.data} isFreeAction={false} />, },
+        // ]
+
+
+
+
+ onRowDelete: oldData =>
+                        new Promise(resolve => {
+                            setTimeout(() => {
+                                resolve();
+                                const data = [...state.data];
+                                data.splice(data.indexOf(oldData), 1);
+                                setState({ ...state, data });
+                            }, 600);
+                        }),
+
+
+                         <DatePicker
+                            label={field.label}
+                            name={field.name}
+                            onChange={props.handleChange}
+                        />
