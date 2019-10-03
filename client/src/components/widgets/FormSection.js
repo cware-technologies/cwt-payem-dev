@@ -6,12 +6,16 @@ import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Select from './Select';
-import DatePicker from "react-datepicker";
 import CheckBoxes from './CheckBoxes';
 import classNames from 'classnames';
 import { FormHelperText } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { DateTimePicker } from '../../../node_modules/@material-ui/pickers';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+
 
 const useStyles = makeStyles(theme => ({
     main: {
@@ -47,23 +51,24 @@ const useStyles = makeStyles(theme => ({
 
 export default function FormSection(props) {
     const classes = useStyles();
-    const disable = props.disable
     const getFormFields = (field) => {
-        console.log(field)
         switch (field.type) {
             case 'TextField':
                 return (
                     <Grid item xs={4}>
+                    {console.log(props.data[field.name])}
                         <TextField
                             id="outlined-name"
                             name={field.name}
                             label={field.label}
-                            className={classes.textField}
+                            value={props.data[field.name]}
                             onChange={props.handleChange}
+                            disabled={field.disabled}
                             margin="normal"
                             variant="outlined"
+                            className={classes.textField}
                             onBlur={props.handleBlur}
-                            
+                            style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none' } : {}}
                         />
                     </Grid>
                 )
@@ -100,7 +105,7 @@ export default function FormSection(props) {
             case 'Date':
                 return (
                     <Grid item xs={4}>
-                    <TextField
+                        <TextField
                             id="outlined-multiline-static"
                             label={field.label}
                             type='date'
@@ -115,7 +120,28 @@ export default function FormSection(props) {
             case 'Checkbox':
                 return (
                     <Grid item xs={4}>
-                        <CheckBoxes label={field.label} options={field.options} />
+                        <CheckBoxes
+                            label={field.label}
+                            options={field.options}
+                            disabled={field.readOnly && field.readOnly(props.data)}
+                        />
+                    </Grid>
+                )
+            case 'Radio':
+                return (
+                    <Grid items xs={4}>
+                        <FormControl disabled={field.readOnly && field.readOnly(props.data)} componnt="fieldset" className={classes.formControl}>
+                            <FormLabel component="legend">{field.label}</FormLabel>
+                            <RadioGroup aria-label="gender" name={field.name} value={props.data[field.name]} onChange={props.handleChange}>
+                                {
+                                    field.options.map(option=>{
+                                        return(
+                                            <FormControlLabel value={option.value} control={<Radio />} label={option.label} />
+                                        )
+                                    })
+                                }
+                            </RadioGroup>
+                        </FormControl>
                     </Grid>
                 )
             case 'Empty':

@@ -38,7 +38,9 @@ export default function CheckboxLabels(props) {
                                     <Checkbox
                                         checked={state.checkedA}
                                         onChange={handleChange('checkedA')}
-                                        value="checkedA" />
+                                        value="checkedA" 
+                                        disabled= {props.disabled}
+                                    />
                                 }
                                 label={option.label}
                             />

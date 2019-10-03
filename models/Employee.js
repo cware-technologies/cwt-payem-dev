@@ -25,6 +25,12 @@ module.exports = db.define("C_EMP", {
         type: Sequelize.STRING(50),
         allowNull: false,
     },
+    full_name: {
+        type: Sequelize.VIRTUAL,
+        get () {
+          return this.getDataValue('fst_name') + ' ' + this.getDataValue('mid_name') + ' ' + this.getDataValue('last_name')
+        }
+      },
     created: {
         allowNull: false,
         type: Sequelize.DATE,

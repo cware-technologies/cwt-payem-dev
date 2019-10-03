@@ -7,11 +7,11 @@ import axios from 'axios';
 export default function EmployeeList(props) {
   const [state, setState] = React.useState({
     columns: [
-      { title: 'Name', field: 'fst_name' },
-      { title: 'Status', field: 'ATTRIB_25' },
-      { title: 'Pay Type', field: 'ATTRIB_23' },
-      { title: 'Frequency', field: 'ATTRIB_22' },
-      { title: 'Registration', field: 'FLG_02' },
+      { title: 'Name', field: 'full_name', },
+      { title: 'Status', field: 'ATTRIB_25', lookup: { active: 'active', inactive: 'inactive' } },
+      { title: 'Pay Type', field: 'ATTRIB_23', lookup: { Hourly: 'Hourly', Salary: 'Salary' } },
+      { title: 'Frequency', field: 'ATTRIB_22', lookup: { Weekly: 'Weekly', Biweekly: 'Biweekly', SemiMonthly: 'Semi-monthly', Monthly: 'Monthly', Quarterly: 'Quarterly', SemiAnnualy: 'Semi-Annually' } },
+      { title: 'Registration', field: 'FLG_02', lookup: { Complete: 'Complete', Incomplete: 'Incomplete' } },
     ],
     data: [
       // { id: '1', name: 'Sajeel', status: 'Active', pay_type: 'Salary', frequency: 'Monthly', registration: 'Complete' },
@@ -57,7 +57,7 @@ export default function EmployeeList(props) {
   const handleUpdate = (newData, oldData) => {
     console.log(newData)
     return new Promise((resolve) => {
-      axios.put(`http://localhost:4000/employees/${newData.row_id}`, {newData});
+      axios.put(`http://localhost:4000/employees/${newData.row_id}`, { newData });
       resolve();
       const data = [...state.data];
       const index = data.indexOf(oldData);
