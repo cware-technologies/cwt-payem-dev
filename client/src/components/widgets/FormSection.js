@@ -16,7 +16,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-
 const useStyles = makeStyles(theme => ({
     main: {
         display: 'flex',
@@ -52,16 +51,16 @@ const useStyles = makeStyles(theme => ({
 export default function FormSection(props) {
     const classes = useStyles();
     const getFormFields = (field) => {
+        console.log(props.data)
         switch (field.type) {
             case 'TextField':
                 return (
                     <Grid item xs={4}>
-                    {console.log(props.data[field.name])}
                         <TextField
                             id="outlined-name"
                             name={field.name}
                             label={field.label}
-                            value={props.data[field.name]}
+                            value={props.data && props.data[field.name]}
                             onChange={props.handleChange}
                             disabled={field.disabled}
                             margin="normal"
@@ -69,6 +68,9 @@ export default function FormSection(props) {
                             className={classes.textField}
                             onBlur={props.handleBlur}
                             style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none' } : {}}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
                         />
                     </Grid>
                 )
@@ -80,8 +82,11 @@ export default function FormSection(props) {
                             name={field.name}
                             label={field.label}
                             options={field.options}
-                            value={props.inputValues[field.name]}
+                            value={props.data && props.data[field.name]}
                             onChange={props.handleChange}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
                         />
                     </Grid>
                 )
@@ -98,11 +103,20 @@ export default function FormSection(props) {
                             margin="normal"
                             variant="outlined"
                             name={field.name}
+                            value={props.data && props.data[field.name]}
                             onChange={props.handleChange}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
                         />
                     </Grid>
                 )
             case 'Date':
+            var date = ''
+                if(props.data[field.name]){
+                    date = props.data && props.data[field.name].slice(0,10)
+                    console.log(date)
+                }
                 return (
                     <Grid item xs={4}>
                         <TextField
@@ -113,7 +127,12 @@ export default function FormSection(props) {
                             margin="normal"
                             variant="outlined"
                             name={field.name}
+                            defaultValue= {date}
+                            value={props.data && props.data[field.name] && props.data[field.name].slice(0,10)}
                             onChange={props.handleChange}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
                         />
                     </Grid>
                 )
@@ -123,19 +142,23 @@ export default function FormSection(props) {
                         <CheckBoxes
                             label={field.label}
                             options={field.options}
+                            value={props.data && props.data[field.name]}
                             disabled={field.readOnly && field.readOnly(props.data)}
                         />
                     </Grid>
                 )
             case 'Radio':
+                let iden = field.defaultValue
+                console.log(iden)
+
                 return (
                     <Grid items xs={4}>
                         <FormControl disabled={field.readOnly && field.readOnly(props.data)} componnt="fieldset" className={classes.formControl}>
                             <FormLabel component="legend">{field.label}</FormLabel>
-                            <RadioGroup aria-label="gender" name={field.name} value={props.data[field.name]} onChange={props.handleChange}>
+                            <RadioGroup defaultValue={props.data && props.data[field.name]} name={field.name} value={props.data && props.data[field.name] && props.data[field.name]} onChange={props.handleChange}>
                                 {
-                                    field.options.map(option=>{
-                                        return(
+                                    field.options.map(option => {
+                                        return (
                                             <FormControlLabel value={option.value} control={<Radio />} label={option.label} />
                                         )
                                     })
@@ -188,7 +211,6 @@ export default function FormSection(props) {
         }
         return arr;
     }
-
     return (
         <div className={classes.main}>
             <Container className="mt-5" className={classes.test}>
@@ -218,12 +240,12 @@ export default function FormSection(props) {
                     }
                     <Button variant="contained" color="primary" type="submit" className={classes.button} >
                         Save
-                    </Button>
+                        </Button>
                 </form>
             </Container>
             <Container className={classNames(classes.test2, "mt-5")}>
                 <ul>
-                    {props.errors.map(error =>
+                    {props.errors && props.errors.map(error =>
                         <li>
                             <FormHelperText error>
                                 {error}

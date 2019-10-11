@@ -31,10 +31,9 @@ export default function TaxList() {
                 columns={state.columns}
                 data={state.data}
                 exportButton={true}
-                icon='add'
-                tooltip='Add Code'
-                isFreeAction={true}
-                handleModalOpen={(event) => handleModalOpen()}
+                actions={[
+                    { icon: 'add', tooltip: 'Add Code', onClick: handleModalOpen, isFreeAction: true },
+                ]}
             />
             <FullScreenDialog
                 open={state.modalOpen}

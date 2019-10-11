@@ -100,7 +100,6 @@ export default function ScrollableTabsButtonForce(props) {
                     title={props.tabs[value].label} 
                     columns={props.tabs[value].columns} 
                     data={props.data} 
-                    isFreeAction={true}
                     icon='add'
                     tooltip= {"Add " + props.tabs[value].label}
                     handleModalOpen={(event) => handleModalOpen()}

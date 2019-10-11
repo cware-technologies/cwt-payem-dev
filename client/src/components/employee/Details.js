@@ -3,7 +3,6 @@ import FormSection from '../widgets/FormSection';
 import * as Yup from 'yup';
 import Validation from '../validation/Validation';
 import axios from 'axios';
-import { Route, withRouter } from 'react-router-dom';
 import Snackbar from '../widgets/Snackbar';
 
 const personalInfoFields = [
@@ -19,9 +18,6 @@ const personalInfoFields = [
         name: 'FLG_01'
     },
     { type: 'Date', label: 'Date of Birth', name: 'ATTRIB_18' },
-]
-
-const contactInfoFields = [
     { type: 'TextArea', label: 'Address', name: 'ATTRIB_01' },
     { type: 'TextField', label: 'City', name: 'ATTRIB_07' },
     { type: 'TextField', label: 'State', name: 'ATTRIB_08' },
@@ -29,9 +25,6 @@ const contactInfoFields = [
     { type: 'TextField', label: 'Email', name: 'ATTRIB_10' },
     { type: 'TextField', label: 'Cell #', name: 'ATTRIB_11' },
     { type: 'TextField', label: 'Phone #', name: 'ATTRIB_12' },
-]
-
-const workInfoFields = [
     {
         type: 'Select', label: 'Location',
         options: [{ label: 'Location 1', value: '1' }, { label: 'Location 2', value: '2' },
@@ -39,9 +32,6 @@ const workInfoFields = [
         name: 'ATTRIB_21'
     },
     { type: 'Date', label: 'Hire Date', name: 'ATTRIB_19' },
-]
-
-const payInfoFields = [
     {
         type: 'Select', label: 'Pay Frequency',
         options:
@@ -82,6 +72,7 @@ const payInfoFields = [
                 { label: 'Pay Period', value: 'Pay Period' },
             ],
         name: 'ATTRIB_24',
+
         readOnly: (object) => {
             if (object['ATTRIB_23'] === 'Salary') {
                 return false
@@ -135,32 +126,18 @@ const payInfoFields = [
 
 const Sections = [
     {
-        heading: 'Personal Information',
+        heading: 'Details',
         data: personalInfoFields
-    },
-    {
-        heading: 'Contact Information',
-        data: contactInfoFields
-    },
-    {
-        heading: 'Work Information',
-        data: workInfoFields
-    },
-    {
-        heading: 'Pay Information',
-        data: payInfoFields
     },
 ]
 
 const ValidationSchema = Yup.object().shape({
     fst_name: Yup.string()
-        .min(1, 'First Name Too Short!')
         .max(30, 'First Name Too Long!')
         .required('First Name is Required'),
     mid_name: Yup.string()
         .max(30, 'Middle Name Too Long!'),
     last_name: Yup.string()
-        .min(1, 'Last Name Too Short!')
         .max(30, 'Last Name Too Long!')
         .required('Last Name is Required'),
     iden_num: Yup.number()
@@ -211,23 +188,23 @@ const ValidationSchema = Yup.object().shape({
     ATTRIB_23: Yup.string()
         .max(30, 'Pay Type Too Long!')
         .required('Pay Type is Required'),
-    ATTRIB_13: Yup.string().when('ATTRIB_23', {
-        is: 'Hourly',
-        then: Yup.string()
-            .max(30, 'Pay Rate Too Long!')
-            .required('Pay Rate is Required')
-    }),
-    ATTRIB_24: Yup.string().when('ATTRIB_23', {
-        is: 'Salary',
-        then: Yup.string()
-            .required('Pay Rate Type is Required')
-    }),
-    ATTRIB_14: Yup.string().when('ATTRIB_13', {
-        is: 'Annual' || 'Pay Period',
-        then: Yup.string()
-            .max(30, 'Annual Pay Rate Too Long!')
-            .required('Annual Pay Rate is Required'),
-    }),
+    // ATTRIB_13: Yup.string().when('ATTRIB_23', {
+    //     is: 'Hourly',
+    //     then: Yup.string()
+    //         .max(30, 'Pay Rate Too Long!')
+    //         .required('Pay Rate is Required')
+    // }),
+    // ATTRIB_24: Yup.string().when('ATTRIB_23', {
+    //     is: 'Salary',
+    //     then: Yup.string()
+    //         .required('Pay Rate Type is Required')
+    // }),
+    // ATTRIB_14: Yup.string().when('ATTRIB_13', {
+    //     is: 'Annual' || 'Pay Period',
+    //     then: Yup.string()
+    //         .max(30, 'Annual Pay Rate Too Long!')
+    //         .required('Annual Pay Rate is Required'),
+    // }),
     // ATTRIB_15: Yup.string().when('ATTRIB_24',{
     //     is: 'Annual' || 'Pay Period',
     //     then: Yup.string()
@@ -236,29 +213,41 @@ const ValidationSchema = Yup.object().shape({
     // }),
 });
 
-function AddEmployee(props) {
-    const initialData = {
-        ATTRIB_25: 'active', FLG_02: 'Complete'
-    }
-    const [data, setdata] = React.useState(initialData);
+
+
+export default function Details(props) {
+    const [data, setdata] = React.useState();
     const [errors, setErrors] = React.useState([]);
     const [snackbar, setSnackbar] = React.useState({ open: false, });
 
+    const onChangeValue = (e) => {
+        let name = e.target.name
+        let value = e.target.value
+        setdata({ ...data, [name]: value })
+        console.log(data)
+    }
+
+    useEffect(() => {
+        const data = props.data.rowData
+        setdata({ ...data, data })
+
+    }, {});
+
+
     const onFormSubmit = async (e) => {
         e.preventDefault();
-
         let err = await Validation(ValidationSchema, data, )
         if (err.isValid === false) {
             console.log(err.isValid)
-            setSnackbar({ ...snackbar, open: true, variant: 'error', message: 'Error Adding Employee' });
+            setSnackbar({ ...snackbar, open: true, variant: 'error', message: 'Error Updating Employee' });
             setErrors(err.errors);
         } else {
             console.log(err.isValid)
-            axios.post(`http://localhost:4000/employees`, { data })
+            axios.put(`http://localhost:4000/employees/${data.row_id}`, { newData: data })
                 .then(res => {
                     console.log(res);
                     console.log(res.data);
-                    setSnackbar({ ...snackbar, open: true, variant: 'success', message: 'Employee Added Successfully' });
+                    setSnackbar({ ...snackbar, open: true, variant: 'success', message: 'Employee Updated Successfully' });
                 })
             console.log(data)
         }
@@ -270,35 +259,29 @@ function AddEmployee(props) {
         }
 
         setSnackbar({ ...snackbar, open: false })
-        setdata({ ...initialData });
-        props.history.push("/employees");
     }
 
-    const onChangeValue = (e) => {
-        let name = e.target.name
-        let value = e.target.value
-        setdata({ ...data, [name]: value })
+    if (data) {
+        return (
+            <div>
+                <FormSection
+                    fields={Sections}
+                    data={data}
+                    handleChange={onChangeValue}
+                    onFormSubmit={onFormSubmit}
+                    errors={errors}
+                />
+
+                <Snackbar
+                    variant={snackbar.variant}
+                    message={snackbar.message}
+                    open={snackbar.open}
+                    handleClose={handleSnackbarClose}
+            />
+            </div>
+        )
     }
-
-    return (
-        <div>
-            <FormSection
-                fields={Sections}
-                data={data}
-                handleChange={onChangeValue}
-                inputValues={data}
-                onFormSubmit={onFormSubmit}
-                errors={errors}
-            />
-
-            <Snackbar
-                variant={snackbar.variant}
-                message={snackbar.message}
-                open={snackbar.open}
-                handleClose={handleSnackbarClose}
-            />
-        </div>
-    )
+    else {
+        return null;
+    }
 }
-
-export default withRouter(AddEmployee)

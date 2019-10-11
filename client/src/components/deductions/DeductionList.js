@@ -32,10 +32,9 @@ export default function DeductionList() {
         columns={state.columns}
         data={state.data}
         exportButton={true}
-        icon='add'
-        tooltip='Add Deduction'
-        isFreeAction={true}
-        handleModalOpen={(event) => handleModalOpen()}
+        actions={[
+          { icon: 'add', tooltip: 'Add Deduction', onClick: handleModalOpen, isFreeAction: true },
+        ]}
       />
       <FullScreenDialog
         open={state.modalOpen}

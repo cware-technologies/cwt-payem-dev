@@ -34,15 +34,8 @@ export default function Employee(props) {
                     actionsColumnIndex: -1,
                 }}
                 actions={
-                    props.isFreeAction ?
-                        [
-                            {
-                                icon: props.icon,
-                                tooltip: props.tooltip,
-                                isFreeAction: props.isFreeAction,
-                                onClick: props.handleModalOpen
-                            }
-                        ] : null}
+                    props.actions
+                }
             />
         </React.Fragment>
     )

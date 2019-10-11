@@ -24,6 +24,7 @@ export default function CheckboxLabels(props) {
 
     const handleChange = name => event => {
         setState({ ...state, [name]: event.target.checked });
+        console.log("Radio Checked ", event.target.checked)
     };
 
     return (

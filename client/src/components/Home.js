@@ -84,6 +84,7 @@ export default function Home(props) {
                     title="Recent PayRolls"
                     columns={columns}
                     data={data}
+                    exportButton={true}
                 />
             </div>
             <div>

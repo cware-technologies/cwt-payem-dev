@@ -25,3 +25,25 @@
                             name={field.name}
                             onChange={props.handleChange}
                         />
+
+
+        detailPanel={props.detailPanel ? rowData => {
+                    return (
+                        <Table
+                            title={rowData.full_name}
+                            columns={columns}
+                            parentChildData={myData}
+                        />
+                    )
+                } : () => { }
+                }
+
+
+
+
+
+
+
+
+                handleDetailsOpen={(event, rowData) => handleDetailsOpen(event, rowData)}
+        handleModalOpen={(event) => handleModalOpen()}

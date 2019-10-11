@@ -10,6 +10,9 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
         minWidth: 120,
     },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+      },
 }));
 
 export default function ControlledOpenSelect(props) {
@@ -33,13 +36,14 @@ export default function ControlledOpenSelect(props) {
     return (
         <form autoComplete="off">
             <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="demo-controlled-open-select">{props.label}</InputLabel>
+                <InputLabel shrink htmlFor="demo-controlled-open-select">{props.label}</InputLabel>
                 <Select
                     open={open}
                     onClose={handleClose}
                     onOpen={handleOpen}
                     value={props.value}
                     onChange={props.onChange}
+                    className={classes.selectEmpty}
                     inputProps={{
                         name: props.name,
                         id: 'demo-controlled-open-select',

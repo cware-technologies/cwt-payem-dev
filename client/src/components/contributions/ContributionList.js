@@ -32,10 +32,9 @@ export default function ContributionList() {
                 columns={state.columns}
                 data={state.data}
                 exportButton={true}
-                icon='add'
-                tooltip='Add Contribution'
-                isFreeAction={true}
-                handleModalOpen={(event) => handleModalOpen()}
+                actions={[
+                    { icon: 'add', tooltip: 'Add Contribution', onClick: handleModalOpen, isFreeAction: true },
+                ]}
             />
             <FullScreenDialog
                 open={state.modalOpen}

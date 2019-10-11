@@ -25,6 +25,10 @@ module.exports = db.define("C_EMP", {
         type: Sequelize.STRING(50),
         allowNull: false,
     },
+    iden_num: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+    },
     full_name: {
         type: Sequelize.VIRTUAL,
         get () {

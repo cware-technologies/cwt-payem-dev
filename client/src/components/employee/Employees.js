@@ -3,11 +3,14 @@ import Table from '../widgets/Table';
 import FullScreenDialog from '../widgets/FullScreenDialog';
 import Register from './Register';
 import axios from 'axios';
+import Details from './Details';
+import { truncate } from 'fs';
 
 export default function EmployeeList(props) {
   const [state, setState] = React.useState({
     columns: [
-      { title: 'Name', field: 'full_name', },
+      { title: 'First Name', field: 'fst_name',},
+      { title: 'Last Name', field: 'last_name',},
       { title: 'Status', field: 'ATTRIB_25', lookup: { active: 'active', inactive: 'inactive' } },
       { title: 'Pay Type', field: 'ATTRIB_23', lookup: { Hourly: 'Hourly', Salary: 'Salary' } },
       { title: 'Frequency', field: 'ATTRIB_22', lookup: { Weekly: 'Weekly', Biweekly: 'Biweekly', SemiMonthly: 'Semi-monthly', Monthly: 'Monthly', Quarterly: 'Quarterly', SemiAnnualy: 'Semi-Annually' } },
@@ -18,7 +21,10 @@ export default function EmployeeList(props) {
       // { id: '2', name: 'Saad', status: 'Active', pay_type: 'Salary', frequency: 'Monthly', registration: 'Complete' },
     ],
     modalOpen: false,
+    detailsOpen: false
   });
+
+  const [empData, setEmpData] = React.useState();
 
   useEffect(() => {
     axios.get(`http://localhost:4000/employees`)
@@ -42,6 +48,15 @@ export default function EmployeeList(props) {
     props.history.push("/employee/" + rowData.row_id);
     console.log(event)
     console.log(rowData)
+  }
+
+  const handleDetailsOpen = (event, rowData) => {
+    setState({ ...state, detailsOpen: true })
+    setEmpData({ ...empData, rowData })
+  }
+
+  const handleDetailsClose = () => {
+    setState({ ...state, detailsOpen: false })
   }
 
   const handleDelete = (rowData) => {
@@ -74,11 +89,11 @@ export default function EmployeeList(props) {
         title="Employees"
         columns={state.columns}
         data={state.data}
-        exportButton={true}
-        icon='add'
-        tooltip='Add Employee'
-        isFreeAction={true}
-        handleModalOpen={(event) => handleModalOpen()}
+        exportButtotruncate
+        actions = {[
+          {icon:'add', tooltip: 'Add Employee', onClick: handleModalOpen, isFreeAction: true},
+          {icon:'details', tooltip: 'Details', onClick: handleDetailsOpen},
+          ]}
         onRowClick={handleRowClick}
         handleDelete={handleDelete}
         handleUpdate={handleUpdate}
@@ -88,6 +103,12 @@ export default function EmployeeList(props) {
         handleClose={handleModalClose}
         component={<Register />}
         title='Add Employee'
+      />
+      <FullScreenDialog
+        open={state.detailsOpen}
+        handleClose={handleDetailsClose}
+        component={<Details data={empData} />}
+        title='Employee Details'
       />
     </React.Fragment>
   );
