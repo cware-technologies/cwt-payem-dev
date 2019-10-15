@@ -8,9 +8,13 @@ app.use(express.json());
 
 const employeeRoutes = require('./api/routes/employees');
 const userRoutes = require('./api/routes/users');
+const taxRoutes = require('./api/routes/tax');
+const contributionRoutes = require('./api/routes/contributions');
 
 app.use('/employees', employeeRoutes);
 app.use('/users', userRoutes);
+app.use('/tax', taxRoutes);
+app.use('/contributions', contributionRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');

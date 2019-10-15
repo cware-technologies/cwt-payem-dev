@@ -1,10 +1,11 @@
-const Employees = require('../../models/').C_EMP;
+const ListValue = require('../../models/').C_LST_VAL;
 
-async function getEmployees(req, res, next) {
-    Employees.findAll({
+async function getContributions(req, res, next) {
+    ListValue.findAll({
+        where: { type: 'contribution', }
     }).then(data => {
         res.status(200).json({
-            mesage: 'got employees',
+            mesage: 'got record',
             data: data
         })
     }).catch(err => {
@@ -12,12 +13,12 @@ async function getEmployees(req, res, next) {
     })
 }
 
-async function getEmployee(req, res, next) {
-    Employees.findAll({
-        where: { row_id: req.params.id }
+async function getContribution(req, res, next) {
+    ListValue.findAll({
+        where: { row_id: req.params.id, }
     }).then(data => {
         res.status(200).json({
-            messgae: 'got employee',
+            messgae: 'got record',
             iddd: req.params.id,
             data: data
         })
@@ -26,43 +27,40 @@ async function getEmployee(req, res, next) {
     })
 }
 
-async function createEmployee(req, res, next) {
+async function createContribution(req, res, next) {
     console.log(req.body.data)
-    try{
-        let data = await Employees.create({
+    try {
+        let data = await ListValue.create({
             ...req.body.data
         })
         res.status(200).json({
             status: 200,
             data,
-            message: 'Employee was created'
+            message: 'Record was created'
         })
     }
 
-    catch(err){
+    catch (err) {
         err.status = 400
         err.message = `Database Error: ${err}`
         next(err)
         console.log(err)
     }
-
-
-  
 }
 
-async function updateEmployee(req, res, next) {
+async function updateContribution(req, res, next) {
     console.log("DAATAAAA", req.body.newData)
-    Employees.findOne({
+    ListValue.findOne({
         where: { row_id: req.params.id }
-    }).then(employee => {
-        if (employee) {
-            employee.update(
+    }).then(value => {
+        if (value) {
+            value.update(
                 req.body.newData
-            ).then(employee => {
-                console.log("UPDATED DATAAAA", employee)
+            ).then(value => {
+                console.log("UPDATED DATAAAA", value)
                 res.status(200).json({
                     data: employee,
-                    messge: 'employee was updated'
+                    messge: 'record was updated'
                 })
             }).catch(err => {
                 console.log("ERRRRRRORRRR ", err)
@@ -76,14 +74,14 @@ async function updateEmployee(req, res, next) {
         })
 }
 
-async function deleteEmployee(req, res, next) {
-    Employees.findOne({
+async function deleteContribution(req, res, next) {
+    ListValue.findOne({
         where: { row_id: req.params.id }
-    }).then(employee => {
-        if (employee) {
-            employee.destroy({}).then(employee => {
+    }).then(value => {
+        if (value) {
+            value.destroy({}).then(value => {
                 res.status(200).json({
-                    messgae: 'employee was deleted'
+                    messgae: 'Record was deleted'
                 })
             })
         }
@@ -93,9 +91,9 @@ async function deleteEmployee(req, res, next) {
 }
 
 module.exports = {
-    getEmployees,
-    getEmployee,
-    createEmployee,
-    updateEmployee,
-    deleteEmployee,
+    getContributions,
+    getContribution,
+    createContribution,
+    updateContribution,
+    deleteContribution,
 }

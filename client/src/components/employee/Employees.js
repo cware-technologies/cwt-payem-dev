@@ -9,17 +9,14 @@ import { truncate } from 'fs';
 export default function EmployeeList(props) {
   const [state, setState] = React.useState({
     columns: [
-      { title: 'First Name', field: 'fst_name',},
-      { title: 'Last Name', field: 'last_name',},
+      { title: 'First Name', field: 'fst_name', },
+      { title: 'Last Name', field: 'last_name', },
       { title: 'Status', field: 'ATTRIB_25', lookup: { active: 'active', inactive: 'inactive' } },
       { title: 'Pay Type', field: 'ATTRIB_23', lookup: { Hourly: 'Hourly', Salary: 'Salary' } },
       { title: 'Frequency', field: 'ATTRIB_22', lookup: { Weekly: 'Weekly', Biweekly: 'Biweekly', SemiMonthly: 'Semi-monthly', Monthly: 'Monthly', Quarterly: 'Quarterly', SemiAnnualy: 'Semi-Annually' } },
       { title: 'Registration', field: 'FLG_02', lookup: { Complete: 'Complete', Incomplete: 'Incomplete' } },
     ],
-    data: [
-      // { id: '1', name: 'Sajeel', status: 'Active', pay_type: 'Salary', frequency: 'Monthly', registration: 'Complete' },
-      // { id: '2', name: 'Saad', status: 'Active', pay_type: 'Salary', frequency: 'Monthly', registration: 'Complete' },
-    ],
+    data: [],
     modalOpen: false,
     detailsOpen: false
   });
@@ -89,11 +86,11 @@ export default function EmployeeList(props) {
         title="Employees"
         columns={state.columns}
         data={state.data}
-        exportButtotruncate
-        actions = {[
-          {icon:'add', tooltip: 'Add Employee', onClick: handleModalOpen, isFreeAction: true},
-          {icon:'details', tooltip: 'Details', onClick: handleDetailsOpen},
-          ]}
+        exportButton={true}
+        actions={[
+          { icon: 'add', tooltip: 'Add Employee', onClick: handleModalOpen, isFreeAction: true },
+          { icon: 'details', tooltip: 'Details', onClick: handleDetailsOpen },
+        ]}
         onRowClick={handleRowClick}
         handleDelete={handleDelete}
         handleUpdate={handleUpdate}

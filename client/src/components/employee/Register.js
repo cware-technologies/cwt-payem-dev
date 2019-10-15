@@ -3,8 +3,8 @@ import FormSection from '../widgets/FormSection';
 import * as Yup from 'yup';
 import Validation from '../validation/Validation';
 import axios from 'axios';
-import { Route, withRouter } from 'react-router-dom';
 import Snackbar from '../widgets/Snackbar';
+import { Route, withRouter } from 'react-router-dom';
 
 const personalInfoFields = [
     { type: 'TextField', label: 'First Name', name: 'fst_name' },
@@ -13,9 +13,11 @@ const personalInfoFields = [
     { type: 'TextField', label: 'ID Number', name: 'iden_num' },
     {
         type: 'Select', label: 'Gender',
-        options: [{ label: 'Male', value: 'm' },
-        { label: 'Female', value: 'f' },
-        ],
+        options:
+            [
+                { label: 'Male', value: 'm' },
+                { label: 'Female', value: 'f' },
+            ],
         name: 'FLG_01'
     },
     { type: 'Date', label: 'Date of Birth', name: 'ATTRIB_18' },

@@ -1,7 +1,8 @@
-const Employees = require('../../models/').C_EMP;
+const ListValue = require('../../models/').C_LST_VAL;
 
-async function getEmployees(req, res, next) {
-    Employees.findAll({
+async function getTaxs(req, res, next) {
+    ListValue.findAll({
+        where: { type: 'tax', }
     }).then(data => {
         res.status(200).json({
             mesage: 'got employees',
@@ -12,8 +13,8 @@ async function getEmployees(req, res, next) {
     })
 }
 
-async function getEmployee(req, res, next) {
-    Employees.findAll({
+async function getTax(req, res, next) {
+    ListValue.findAll({
         where: { row_id: req.params.id }
     }).then(data => {
         res.status(200).json({
@@ -26,10 +27,10 @@ async function getEmployee(req, res, next) {
     })
 }
 
-async function createEmployee(req, res, next) {
+async function createTax(req, res, next) {
     console.log(req.body.data)
     try{
-        let data = await Employees.create({
+        let data = await ListValue.create({
             ...req.body.data
         })
         res.status(200).json({
@@ -45,14 +46,11 @@ async function createEmployee(req, res, next) {
         next(err)
         console.log(err)
     }
-
-
-  
 }
 
-async function updateEmployee(req, res, next) {
+async function updateTax(req, res, next) {
     console.log("DAATAAAA", req.body.newData)
-    Employees.findOne({
+    ListValue.findOne({
         where: { row_id: req.params.id }
     }).then(employee => {
         if (employee) {
@@ -76,8 +74,8 @@ async function updateEmployee(req, res, next) {
         })
 }
 
-async function deleteEmployee(req, res, next) {
-    Employees.findOne({
+async function deleteTax(req, res, next) {
+    ListValue.findOne({
         where: { row_id: req.params.id }
     }).then(employee => {
         if (employee) {
@@ -93,9 +91,9 @@ async function deleteEmployee(req, res, next) {
 }
 
 module.exports = {
-    getEmployees,
-    getEmployee,
-    createEmployee,
-    updateEmployee,
-    deleteEmployee,
+   getTaxs,
+   getTax,
+   createTax,
+   updateTax,
+   deleteTax
 }

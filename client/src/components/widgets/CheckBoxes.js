@@ -18,9 +18,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function CheckboxLabels(props) {
     const classes = useStyles();
-    const [state, setState] = React.useState({
-
-    });
+    const [state, setState] = React.useState(false);
 
     const handleChange = name => event => {
         setState({ ...state, [name]: event.target.checked });
@@ -38,8 +36,9 @@ export default function CheckboxLabels(props) {
                                 control={
                                     <Checkbox
                                         checked={state.checkedA}
-                                        onChange={handleChange('checkedA')}
-                                        value="checkedA" 
+                                        onChange = {props.onChange}
+                                        value={true}
+                                        name= {props.name}
                                         disabled= {props.disabled}
                                     />
                                 }

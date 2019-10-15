@@ -55,7 +55,7 @@ export default function FormSection(props) {
         switch (field.type) {
             case 'TextField':
                 return (
-                    <Grid item xs={4}>
+                    <Grid item xs={4} style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none', visibility: 'hidden' } : {}}>
                         <TextField
                             id="outlined-name"
                             name={field.name}
@@ -67,7 +67,7 @@ export default function FormSection(props) {
                             variant="outlined"
                             className={classes.textField}
                             onBlur={props.handleBlur}
-                            style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none' } : {}}
+                            style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none', visibility: 'hidden' } : {}}
                             InputLabelProps={{
                                 shrink: true
                             }}
@@ -76,7 +76,7 @@ export default function FormSection(props) {
                 )
             case 'Select':
                 return (
-                    <Grid item xs={4}>
+                    <Grid item xs={4} style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none', visibility: 'hidden' } : {}}>
                         <Select
                             id="outlined-name"
                             name={field.name}
@@ -92,7 +92,7 @@ export default function FormSection(props) {
                 )
             case 'TextArea':
                 return (
-                    <Grid item xs={4}>
+                    <Grid item xs={4} style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none', visibility: 'hidden' } : {}}>
                         <TextField
                             id="outlined-multiline-static"
                             label={field.label}
@@ -112,13 +112,13 @@ export default function FormSection(props) {
                     </Grid>
                 )
             case 'Date':
-            var date = ''
-                if(props.data[field.name]){
-                    date = props.data && props.data[field.name].slice(0,10)
+                var date = ''
+                if (props.data[field.name]) {
+                    date = props.data && props.data[field.name].slice(0, 10)
                     console.log(date)
                 }
                 return (
-                    <Grid item xs={4}>
+                    <Grid item xs={4} style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none', visibility: 'hidden' } : {}}>
                         <TextField
                             id="outlined-multiline-static"
                             label={field.label}
@@ -127,8 +127,8 @@ export default function FormSection(props) {
                             margin="normal"
                             variant="outlined"
                             name={field.name}
-                            defaultValue= {date}
-                            value={props.data && props.data[field.name] && props.data[field.name].slice(0,10)}
+                            defaultValue={date}
+                            value={props.data && props.data[field.name] && props.data[field.name].slice(0, 10)}
                             onChange={props.handleChange}
                             InputLabelProps={{
                                 shrink: true
@@ -138,13 +138,13 @@ export default function FormSection(props) {
                 )
             case 'Checkbox':
                 return (
-                    <Grid item xs={4}>
-                        <CheckBoxes
-                            label={field.label}
-                            options={field.options}
-                            value={props.data && props.data[field.name]}
-                            disabled={field.readOnly && field.readOnly(props.data)}
+                    <Grid item xs={4} style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none', visibility: 'hidden' } : {}}>
+                        <input type="checkbox" 
+                            name={field.name} 
+                            onChange={props.handleChange}
+                            value = {props.data && props.data[field.name]}
                         />
+                        {field.label}
                     </Grid>
                 )
             case 'Radio':
@@ -152,7 +152,7 @@ export default function FormSection(props) {
                 console.log(iden)
 
                 return (
-                    <Grid items xs={4}>
+                    <Grid items xs={4} style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none', visibility: 'hidden' } : {}}>
                         <FormControl disabled={field.readOnly && field.readOnly(props.data)} componnt="fieldset" className={classes.formControl}>
                             <FormLabel component="legend">{field.label}</FormLabel>
                             <RadioGroup defaultValue={props.data && props.data[field.name]} name={field.name} value={props.data && props.data[field.name] && props.data[field.name]} onChange={props.handleChange}>
@@ -169,7 +169,7 @@ export default function FormSection(props) {
                 )
             case 'Empty':
                 return (
-                    <Grid item xs={4}>
+                    <Grid item xs={4} style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none', visibility: 'hidden' } : {}}>
 
                     </Grid>
                 )

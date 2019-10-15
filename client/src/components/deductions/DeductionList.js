@@ -1,21 +1,57 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Table from '../widgets/Table'
 import FullScreenDialog from '../widgets/FullScreenDialog';
 import AddDeduction from './AddDeduction';
+import axios from 'axios';
 
 export default function DeductionList() {
   const [state, setState] = React.useState({
     columns: [
-      { title: 'Name', field: 'name' },
-      { title: 'Description', field: 'description' },
-      { title: 'Method', field: 'method' },
-      { title: 'Amount', field: 'amount' },
+      { title: 'Name', field: 'val' },
+      { title: 'Description', field: 'ATTRIB_03' },
+      { title: 'Method', field: 'ATTRIB_06' },
+      { title: 'Amount', field: 'ATTRIB_14' },
+      { title: 'Amount Per Pay', field: 'ATTRIB_15' },
     ],
     data: [
-      { name: 'Deduction 1', description: 'kjhkjh khj hkj kjh  kjh  kjh kjh kjh  iuoi  lijh', method: 'Method 1', amount: '45000', },
+
     ],
     modalOpen: false,
   });
+
+  useEffect(() => {
+    axios.get(`http://localhost:4000/deductions`)
+      .then(res => {
+        const data = res.data.data
+        setState({ ...state, data })
+        console.log("DATA ", data)
+      })
+    console.log(state)
+  }, []);
+
+  const handleDelete = (rowData) => {
+    return new Promise((resolve) => {
+      axios.delete(`http://localhost:4000/deductions/${rowData.row_id}`);
+      resolve()
+      const data = [...state.data];
+      data.splice(data.indexOf(rowData), 1);
+      setState({ ...state, data });
+    })
+  }
+
+  const handleUpdate = (newData, oldData) => {
+    console.log(newData)
+    return new Promise((resolve) => {
+      axios.put(`http://localhost:4000/deductions/${newData.row_id}`, { newData });
+      resolve();
+      const data = [...state.data];
+      const index = data.indexOf(oldData);
+      data[index] = newData;
+      setState({ ...state, data });
+      console.log("new Data ", newData)
+      console.log("Old Data ", oldData)
+    })
+  }
 
   const handleModalOpen = () => {
     setState({ ...state, modalOpen: true })
