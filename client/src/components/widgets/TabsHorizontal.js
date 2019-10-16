@@ -66,7 +66,9 @@ export default function ScrollableTabsButtonForce(props) {
         setState({ ...state, modalOpen: false })
     }
 
-    console.log(props.data)
+    if (props.data) {
+        console.log(props.data)
+    }
 
     return (
         <div className={classes.root}>
@@ -96,12 +98,15 @@ export default function ScrollableTabsButtonForce(props) {
             </AppBar>
             <TabPanel>
                 {/* {props.tabs[value].panel} */}
-                <Table 
-                    title={props.tabs[value].label} 
-                    columns={props.tabs[value].columns} 
-                    data={props.data} 
+                <Table
+                    title={props.tabs[value].label}
+                    columns={props.tabs[value].columns}
+                    data={props.data}
+                    actions={[
+                        { icon: 'add', tooltip: 'Add '+props.tabs[value].label, onClick: handleModalOpen, isFreeAction: true },
+                    ]}
                     icon='add'
-                    tooltip= {"Add " + props.tabs[value].label}
+                    tooltip={"Add " + props.tabs[value].label}
                     handleModalOpen={(event) => handleModalOpen()}
                 />
             </TabPanel>
@@ -109,7 +114,7 @@ export default function ScrollableTabsButtonForce(props) {
                 open={state.modalOpen}
                 handleClose={handleModalClose}
                 component={props.tabs[value].component}
-                title= {props.tabs[value].label + " Details"}
+                title={props.tabs[value].label + " Details"}
             />
         </div>
     );

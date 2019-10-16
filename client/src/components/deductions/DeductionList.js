@@ -71,6 +71,8 @@ export default function DeductionList() {
         actions={[
           { icon: 'add', tooltip: 'Add Deduction', onClick: handleModalOpen, isFreeAction: true },
         ]}
+        handleDelete={handleDelete}
+        handleUpdate={handleUpdate}
       />
       <FullScreenDialog
         open={state.modalOpen}

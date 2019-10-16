@@ -6,35 +6,14 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import TrendingDownIcon from '@material-ui/icons/TrendingDown';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
-import ContributionNew from './ContributionNew';
-import DeductionNew from './DeductionNew';
-import Register from './Register';
-
-const basicInfoColumns = [
-    { title: 'ID', field: 'iden_num', },
-    { title: 'Birth Date', field: 'ATTRIB_18' },
-    { title: 'Gender', field: 'FLG_01', },
-    { title: 'Address', field: 'ATTRIB_01' },
-    { title: 'City', field: 'ATTRIB_08' },
-    { title: 'State', field: 'ATTRIB_09' },
-    { title: 'Zip', field: 'ATTRIB_10' },
-    { title: 'Email', field: 'ATTRIB_10' },
-    { title: 'Cell #', field: 'ATTRIB_11' },
-    { title: 'Phone #', field: 'ATTRIB_12' },
-    { title: 'Work Location', field: 'ATTRIB_21' },
-    { title: 'Hire Date', field: 'ATTRIB_19' },
-    { title: 'Pay Rate Type', field: 'ATTRIB_24' },
-    { title: 'Annual Pay Rate', field: 'ATTRIB_14' },
-    { title: 'Pay Period Rate', field: 'ATTRIB_14' },
-    { title: 'Calculated Pay Period', field: 'ATTRIB_15' },
-    { title: 'Calculated Annual Amount', field: 'ATTRIB_15' },
-]
+import EmployeeContributionAdd from './EmployeeContributionAdd';
+import EmployeeDeductionAdd from './EmployeeDeductionAdd';
 
 const contributionsColumns = [
-    { title: 'Name', field: 'type' },
+    { title: 'Contribution', field: 'name' },
     { title: 'Method', field: 'ATTRIB_21' },
     { title: 'Amount Limit', field: 'ATTRIB_11' },
-    { title: 'Amount Per Day', field: 'ATTRIB_12' },
+    { title: 'Amount/Percent Per Pay', field: 'ATTRIB_12' },
     { title: 'Active', field: 'FLG_01' },
 ]
 
@@ -42,7 +21,7 @@ const deductionsColumns = [
     { title: 'Name', field: 'type' },
     { title: 'Method', field: 'ATTRIB_21' },
     { title: 'Amount Limit', field: 'ATTRIB_11' },
-    { title: 'Amount Per Day', field: 'ATTRIB_12' },
+    { title: 'Amount Per Pay', field: 'ATTRIB_12' },
     { title: 'Active', field: 'FLG_01' },
 ]
 
@@ -71,9 +50,8 @@ const bankInfoColumns = [
 ]
 
 const tabs = [
-    { id: '6', label: 'Basic information', icon: <TrendingUpIcon />, columns: basicInfoColumns, component: <Register />, },
-    { id: '1', label: 'Contributions', icon: <TrendingUpIcon />, columns: contributionsColumns, component: <ContributionNew /> },
-    { id: '2', label: 'Deductions', icon: <TrendingDownIcon />, columns: deductionsColumns, component: <DeductionNew /> },
+    { id: '1', label: 'Contributions', icon: <TrendingUpIcon />, columns: contributionsColumns, component: <EmployeeContributionAdd /> },
+    { id: '2', label: 'Deductions', icon: <TrendingDownIcon />, columns: deductionsColumns, component: <EmployeeDeductionAdd /> },
     { id: '3', label: 'Salary Info', icon: <AccountBalanceWalletIcon />, columns: salaryInfoColumns, },
     { id: '4', label: 'Tax Info', icon: <AttachMoneyIcon />, columns: taxInfoColumns },
     { id: '5', label: 'Bank Info', icon: <AccountBalanceIcon />, columns: bankInfoColumns },
@@ -81,10 +59,9 @@ const tabs = [
 
 export default function Employee(props) {
     const [state, setState] = React.useState({
-        data: [
-            // { id: '1', name: 'Sajeel', status: 'Active', pay_type: 'Salary', frequency: 'Monthly', registration: 'Complete' },
-            // { id: '2', name: 'Saad', status: 'Active', pay_type: 'Salary', frequency: 'Monthly', registration: 'Complete' },
-        ],
+        data: [{
+            par_row_id: props.match.params.id
+        }],
         modalOpen: false,
     });
 
@@ -101,19 +78,29 @@ export default function Employee(props) {
         axios.get(`http://localhost:4000/employees/${id}`)
             .then(res => {
                 const data = res.data.data
+                const par_row_id = res.data.data[0].row_id;
+                // setState({
+                //     ...state,
+                //     data: {
+                //         par_row_id: par_row_id
+                //     }
+                // })
                 setState({ ...state, data })
                 console.log("DATA ", data)
             })
         console.log(state)
     }, []);
 
-    return (
-        <React.Fragment>
-            <TabsHorizontal
-                pageTitle="Sajeel"
-                tabs={tabs}
-                data={state.data}
-            />
-        </React.Fragment>
-    )
+    if (state.data) {
+        console.log(state.data)
+        return (
+            <React.Fragment>
+                <TabsHorizontal
+                    pageTitle="Sajeel"
+                    tabs={tabs}
+                    data={state.data}
+                />
+            </React.Fragment>
+        )
+    }
 }

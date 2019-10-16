@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
 export default function FormSection(props) {
     const classes = useStyles();
     const getFormFields = (field) => {
-        console.log(props.data)
+        console.log(props.data.fetchedData)
         switch (field.type) {
             case 'TextField':
                 return (
@@ -75,13 +75,15 @@ export default function FormSection(props) {
                     </Grid>
                 )
             case 'Select':
+                console.log("Name ", field.label)
+                console.log("Options ", field.options)
                 return (
                     <Grid item xs={4} style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none', visibility: 'hidden' } : {}}>
                         <Select
                             id="outlined-name"
                             name={field.name}
                             label={field.label}
-                            options={field.options}
+                            options={props.data.fetchedData}
                             value={props.data && props.data[field.name]}
                             onChange={props.handleChange}
                             InputLabelProps={{
@@ -139,10 +141,10 @@ export default function FormSection(props) {
             case 'Checkbox':
                 return (
                     <Grid item xs={4} style={field.readOnly && field.readOnly(props.data) === true ? { display: 'none', visibility: 'hidden' } : {}}>
-                        <input type="checkbox" 
-                            name={field.name} 
+                        <input type="checkbox"
+                            name={field.name}
                             onChange={props.handleChange}
-                            value = {props.data && props.data[field.name]}
+                            value={props.data && props.data[field.name]}
                         />
                         {field.label}
                     </Grid>

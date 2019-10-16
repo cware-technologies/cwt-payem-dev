@@ -10,11 +10,15 @@ const employeeRoutes = require('./api/routes/employees');
 const userRoutes = require('./api/routes/users');
 const taxRoutes = require('./api/routes/tax');
 const contributionRoutes = require('./api/routes/contributions');
+const deductionRoutes = require('./api/routes/deductions');
+const codeRoutes = require('./api/routes/codes');
 
 app.use('/employees', employeeRoutes);
 app.use('/users', userRoutes);
 app.use('/tax', taxRoutes);
 app.use('/contributions', contributionRoutes);
+app.use('/deductions', deductionRoutes);
+app.use('/codes', codeRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');

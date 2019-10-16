@@ -46,7 +46,7 @@ const ValidationSchema = Yup.object().shape({
         .max(30, 'Amount Limit Too Long!'),
 });
 
-export default function DeductionNew() {
+export default function EmployeeDeductionAdd() {
     const [data, setdata] = React.useState({});
     const [errors, setErrors] = React.useState([]);
 
